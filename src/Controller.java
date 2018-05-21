@@ -1,4 +1,6 @@
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 public class Controller {
     public static GraphicsContext gc;
@@ -12,11 +14,20 @@ public class Controller {
                 }
             }
         }
+        if (field.isGameOver()) {
+            Font font = new Font("Game Over",35);
+            gc.setFont(font);
+            gc.setFill(Color.RED);
+            gc.fillText("Game Over",50,100);
+        }
     }
     public static void moveRight() {
         field.moveRight();
     }
     public static void moveLeft() {
         field.moveLeft();
+    }
+    public static void rotate() {
+        field.rotate();
     }
 }

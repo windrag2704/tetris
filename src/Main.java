@@ -27,7 +27,11 @@ public class Main extends Application {
                if (code.equals("RIGHT")) {
                    Controller.moveRight();
                }
+               if (code.equals("UP")) {
+                   Controller.rotate();
+               }
         });
+        primaryStage.setOnCloseRequest(event -> System.exit(0));
     }
 
 
