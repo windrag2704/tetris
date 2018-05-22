@@ -21,4 +21,14 @@ public class Matrix {
             matrix[i] = 0;
         }
     }
+    public void removeLine(int lineNum) {
+        for (int i = 0; i < width; i++) {
+            matrix[lineNum*width + i] = 0;
+        }
+    }
+    public void moveLine(int src, int dest) {
+        for (int i = 0; i < width; i++) {
+            matrix[dest*width + i] = matrix[src*width + i];
+        }
+    }
 }

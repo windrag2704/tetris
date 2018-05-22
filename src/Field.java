@@ -4,6 +4,7 @@ public class Field {
     private int offsetX = 4;
     private int offsetY = 0;
     private boolean gameOver = false;
+    private boolean pause = false;
     public void start() {
         figure.setRandom();
         insertFigure();
@@ -13,13 +14,14 @@ public class Field {
         return field;
     }
     public void moveDown() {
-        if (gameOver) return;
+        if (gameOver || pause) return;
         removeFigure();
         if (checkNext(figure.getPosition(offsetX,offsetY + 1))){
             offsetY++;
             insertFigure();
         } else {
             insertFigure();
+            removeFullLines();
             figure.setRandom();
             offsetX = 4;
             offsetY = 0;
@@ -32,7 +34,7 @@ public class Field {
         Controller.refresh();
     }
     public void moveLeft() {
-        if (gameOver) return;
+        if (gameOver || pause) return;
         removeFigure();
         if (checkNext(figure.getPosition(offsetX -1,offsetY))) {
             offsetX--;
@@ -41,7 +43,7 @@ public class Field {
         Controller.refresh();
     }
     public void moveRight() {
-        if (gameOver) return;
+        if (gameOver || pause) return;
         removeFigure();
         if (checkNext(figure.getPosition(offsetX + 1,offsetY))) {
             offsetX++;
@@ -50,13 +52,14 @@ public class Field {
         Controller.refresh();
     }
     public void rotate() {
-        if (gameOver) return;
+        if (gameOver || pause) return;
         removeFigure();
         if (checkNext(figure.getRotateCoordinates(offsetX,offsetY))){
             figure.rotate();
         } else {
         }
         insertFigure();
+        Controller.refresh();
     }
     private boolean checkNext(int[][] nextPosition) {
         for (int i = 0; i < 4; i++) {
@@ -69,6 +72,34 @@ public class Field {
 
         }
         return true;
+    }
+    private int checkFullLine() {
+        boolean full = true;
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (field.get(i,j) == 0){
+                    full = false;
+                    break;
+                }
+            }
+            if (full) {
+                return i;
+            }
+            full = true;
+        }
+        return 20;
+    }
+    private void removeFullLines() {
+        int temp;
+        do {
+            temp = checkFullLine();
+            if (temp == 20) break;
+            field.removeLine(temp);
+            for (int i = temp - 1; i >=0; i--) {
+                field.moveLine(i,i+1);
+            }
+        } while (true);
+        Controller.refresh();
     }
     public void clearField() {
         field.clear();
@@ -91,5 +122,8 @@ public class Field {
     }
     public boolean isGameOver() {
         return gameOver;
+    }
+    public void pause() {
+        pause = !pause;
     }
 }

@@ -19,6 +19,7 @@ public class Main extends Application {
         primaryStage.show();
         Controller.gc = gc;
         Tetris tetris = new Tetris();
+        tetris.launch();
         scene.setOnKeyPressed(event -> {
                String code = event.getCode().toString();
                if (code.equals("LEFT")) {
@@ -29,6 +30,12 @@ public class Main extends Application {
                }
                if (code.equals("UP")) {
                    Controller.rotate();
+               }
+               if (code.equals("DOWN")) {
+                   Controller.moveDown();
+               }
+               if (code.equals("SPACE")) {
+                   tetris.pause();
                }
         });
         primaryStage.setOnCloseRequest(event -> System.exit(0));

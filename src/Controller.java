@@ -30,4 +30,7 @@ public class Controller {
     public static void rotate() {
         field.rotate();
     }
+    public static void moveDown() {
+        field.moveDown();
+    }
 }
