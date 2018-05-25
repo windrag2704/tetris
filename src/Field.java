@@ -10,6 +10,14 @@ public class Field {
         insertFigure();
         Controller.refresh();
     }
+    public Figure getFigure() {
+        return figure;
+    }
+    public void restart() {
+        gameOver = false;
+        field.clear();
+        start();
+    }
     public Matrix getField() {
         return field;
     }
@@ -66,7 +74,7 @@ public class Field {
            if (nextPosition[i][1] > 9 || nextPosition[i][1] < 0 || nextPosition[i][0] > 19 || nextPosition[i][0] < 0) {
                return false;
            }
-           if (field.get(nextPosition[i][0], nextPosition[i][1]) == 1) {
+           if (field.get(nextPosition[i][0], nextPosition[i][1]) > 0) {
                return false;
            }
 
@@ -101,9 +109,6 @@ public class Field {
         } while (true);
         Controller.refresh();
     }
-    public void clearField() {
-        field.clear();
-    }
     public void removeFigure() {
         int[][] figurePoints = figure.getPosition(offsetX,offsetY);
         for (int i = 0; i < 4; i++) {
@@ -117,7 +122,7 @@ public class Field {
         for (int i = 0; i < 4; i++) {
             int x = figurePoints[i][1];
             int y = figurePoints[i][0];
-            field.set(y,x,1);
+            field.set(y,x,figure.getFigureNumber());
         }
     }
     public boolean isGameOver() {

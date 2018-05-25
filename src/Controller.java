@@ -9,8 +9,31 @@ public class Controller {
         gc.clearRect(0,0,300,600);
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 10; j++) {
-                if (field.getField().get(i,j)==1) {
-                    gc.fillRect(30*j,30*i,25,25);
+                if (field.getField().get(i,j) > 0) {
+                    switch(field.getField().get(i,j)) {
+                        case 1:
+                            gc.setFill(Color.CYAN);
+                            break;
+                        case 2:
+                            gc.setFill(Color.ORANGE);
+                            break;
+                        case 3:
+                            gc.setFill(Color.BLUE);
+                            break;
+                        case 4:
+                            gc.setFill(Color.YELLOW);
+                            break;
+                        case 5:
+                            gc.setFill(Color.GREEN);
+                            break;
+                        case 6:
+                            gc.setFill(Color.PURPLE);
+                            break;
+                        case 7:
+                            gc.setFill(Color.RED);
+                            break;
+                    }
+                    gc.fillRect(30*j + 2,30*i + 2,26,26);
                 }
             }
         }
@@ -20,17 +43,5 @@ public class Controller {
             gc.setFill(Color.RED);
             gc.fillText("Game Over",50,100);
         }
-    }
-    public static void moveRight() {
-        field.moveRight();
-    }
-    public static void moveLeft() {
-        field.moveLeft();
-    }
-    public static void rotate() {
-        field.rotate();
-    }
-    public static void moveDown() {
-        field.moveDown();
     }
 }

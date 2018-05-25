@@ -2,6 +2,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Figure {
     private int[][][] current;
+    private int figureNumber = 0;
     private int[][][][] figures =
             {
                     {//I
@@ -99,10 +100,14 @@ public class Figure {
         }
         return result;
     }
+    public int getFigureNumber() {
+        return figureNumber;
+    }
 
     public void setRandom() {
         state = 0;
         int temp = ThreadLocalRandom.current().nextInt(0,7);
+        figureNumber = temp + 1;
         current = figures[temp];
     }
 
