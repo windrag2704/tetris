@@ -6,6 +6,8 @@ public class Tetris {
     private boolean pause = true;
     private int period = 1000;
     private int delay = 1000;
+    private boolean gameOver = false;
+    private int score = 0;
     Timer timer;
 
     public Tetris() {
@@ -19,21 +21,25 @@ public class Tetris {
     }
 
     public void figureFall() {
-        if (period == 50) return;
+        if (pause || period == 50) return;
         period = 50;
         delay = 0;
         stop();
         start();
     }
+
     public void moveLeft() {
         field.moveLeft();
     }
+
     public void moveRight() {
         field.moveRight();
     }
+
     public void rotate() {
         field.rotate();
     }
+
     public void restart() {
         field.restart();
         period = 1000;
@@ -43,7 +49,7 @@ public class Tetris {
     }
 
     public void figureRestore() {
-        if (period == 1000) return;
+        if (pause || period == 1000) return;
         period = 1000;
         delay = 1000;
         stop();
@@ -51,18 +57,21 @@ public class Tetris {
     }
 
     public void pause() {
+        if (gameOver) return;
         pause = !pause;
         field.pause();
         if (pause) {
-            start();
-        } else {
             stop();
+        } else {
+            start();
         }
     }
 
     public void stop() {
-        timer.cancel();
-        timer = null;
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
     }
 
     public void start() {
@@ -76,7 +85,9 @@ public class Tetris {
                 field.moveDown();
                 Controller.refresh();
                 if (field.isGameOver()) {
+                    gameOver = field.isGameOver();
                     timer.cancel();
+                    timer = null;
                 }
             }
         }, delay, period);

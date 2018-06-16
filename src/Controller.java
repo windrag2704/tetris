@@ -1,16 +1,16 @@
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 public class Controller {
     public static GraphicsContext gc;
     public static Field field;
-    public static void refresh() {
-        gc.clearRect(0,0,300,600);
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 10; j++) {
-                if (field.getField().get(i,j) > 0) {
-                    switch(field.getField().get(i,j)) {
+    public static GraphicsContext gcNext;
+    public static Text score;
+    private static void drawRect(int i, int j, int figure, GraphicsContext gc) {
+        if (figure > 0) {
+                    switch (figure) {
                         case 1:
                             gc.setFill(Color.CYAN);
                             break;
@@ -33,15 +33,30 @@ public class Controller {
                             gc.setFill(Color.RED);
                             break;
                     }
-                    gc.fillRect(30*j + 2,30*i + 2,26,26);
+                    gc.fillRect(30 * j + 2, 30 * i + 2, 26, 26);
                 }
+    }
+
+    public static void refresh() {
+        gc.clearRect(0, 0, 300, 600);
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 10; j++) {
+                drawRect(i,j,field.getCellValue(i,j),gc);
             }
         }
+        gcNext.clearRect(0,0,120,60);
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 4; j++) {
+                drawRect(i, j, field.getNextFigureCellValue(i,j),gcNext);
+            }
+        }
+        score.setText(field.getScore().toString());
+
         if (field.isGameOver()) {
-            Font font = new Font("Game Over",35);
+            Font font = new Font("Game Over", 35);
             gc.setFont(font);
             gc.setFill(Color.RED);
-            gc.fillText("Game Over",50,100);
+            gc.fillText("Game Over", 50, 100);
         }
     }
 }

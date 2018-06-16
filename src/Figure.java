@@ -78,6 +78,8 @@ public class Figure {
                     }
             };
     private int state = 0;
+    private int next = ThreadLocalRandom.current().nextInt(0,7);
+    private int nextFigureNumber;
 
     public void rotate() {
         state = (state + 1) % current.length;
@@ -100,18 +102,23 @@ public class Figure {
         }
         return result;
     }
+
     public int getFigureNumber() {
         return figureNumber;
     }
 
     public void setRandom() {
         state = 0;
-        int temp = ThreadLocalRandom.current().nextInt(0,7);
+        int temp = next;
+        next = ThreadLocalRandom.current().nextInt(0, 7);
+        nextFigureNumber = next + 1;
         figureNumber = temp + 1;
         current = figures[temp];
     }
-
-    public void reset() {
-        state = 0;
+    int getNextFigureNumber() {
+        return nextFigureNumber;
+    }
+    int[][] getNextFigure() {
+        return figures[next][0];
     }
 }
