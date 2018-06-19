@@ -1,24 +1,24 @@
 class Field {
     private Matrix field = new Matrix(10, 20);
-    private Figure figure = new Figure();
+    private Shapes shapes = new Shapes();
     private int offsetX = 4;
     private int offsetY = 0;
     private boolean gameOver = false;
     private boolean pause = false;
-    private Matrix nextFigureField = new Matrix(4, 2);
+    private Matrix nextShapeField = new Matrix(4, 2);
     private int score;
 
     void start() {
-        figure.setRandom();
+        shapes.setRandom();
         offsetX = 4;
         offsetY = 0;
-        if (!checkNext(figure.getPosition(offsetX, offsetY))) {
+        if (!checkNext(shapes.getPosition(offsetX, offsetY))) {
             gameOver = true;
             return;
         }
-        insertFigure();
-        nextFigureField.clear();
-        insertNextFigure();
+        insertShape();
+        nextShapeField.clear();
+        insertNextShape();
 
         Controller.refresh();
     }
@@ -29,36 +29,36 @@ class Field {
         start();
     }
 
-    int getNextFigureCellValue(int y, int x) {
-        return nextFigureField.get(y, x);
+    int getNextShapeCellValue(int y, int x) {
+        return nextShapeField.get(y, x);
     }
 
     int getCellValue(int y, int x) {
         return field.get(y, x);
     }
 
-    private void insertNextFigure() {
-        nextFigureField.clear();
-        int[][] nextFigure = figure.getNextFigure();
+    private void insertNextShape() {
+        nextShapeField.clear();
+        int[][] nextShape = shapes.getNextShape();
         for (int i = 0; i < 4; i++) {
-            int y = nextFigure[i][0];
-            int x = nextFigure[i][1];
-            nextFigureField.set(y, x, figure.getNextFigureNumber());
+            int y = nextShape[i][0];
+            int x = nextShape[i][1];
+            nextShapeField.set(y, x, shapes.getNextShapeNumber());
         }
     }
 
-    public Integer getScore() {
+    Integer getScore() {
         return score;
     }
 
     void moveDown() {
         if (gameOver || pause) return;
-        removeFigure();
-        if (checkNext(figure.getPosition(offsetX, offsetY + 1))) {
+        removeShape();
+        if (checkNext(shapes.getPosition(offsetX, offsetY + 1))) {
             offsetY++;
-            insertFigure();
+            insertShape();
         } else {
-            insertFigure();
+            insertShape();
             removeFullLines();
             start();
         }
@@ -67,31 +67,31 @@ class Field {
 
     void moveLeft() {
         if (gameOver || pause) return;
-        removeFigure();
-        if (checkNext(figure.getPosition(offsetX - 1, offsetY))) {
+        removeShape();
+        if (checkNext(shapes.getPosition(offsetX - 1, offsetY))) {
             offsetX--;
         }
-        insertFigure();
+        insertShape();
         Controller.refresh();
     }
 
     void moveRight() {
         if (gameOver || pause) return;
-        removeFigure();
-        if (checkNext(figure.getPosition(offsetX + 1, offsetY))) {
+        removeShape();
+        if (checkNext(shapes.getPosition(offsetX + 1, offsetY))) {
             offsetX++;
         }
-        insertFigure();
+        insertShape();
         Controller.refresh();
     }
 
     void rotate() {
         if (gameOver || pause) return;
-        removeFigure();
-        if (checkNext(figure.getRotateCoordinates(offsetX, offsetY))) {
-            figure.rotate();
+        removeShape();
+        if (checkNext(shapes.getRotateCoordinates(offsetX, offsetY))) {
+            shapes.rotate();
         }
-        insertFigure();
+        insertShape();
         Controller.refresh();
     }
 
@@ -139,8 +139,8 @@ class Field {
         Controller.refresh();
     }
 
-    private void removeFigure() {
-        int[][] figurePoints = figure.getPosition(offsetX, offsetY);
+    private void removeShape() {
+        int[][] figurePoints = shapes.getPosition(offsetX, offsetY);
         for (int i = 0; i < 4; i++) {
             int x = figurePoints[i][1];
             int y = figurePoints[i][0];
@@ -148,12 +148,12 @@ class Field {
         }
     }
 
-    private void insertFigure() {
-        int[][] figurePoints = figure.getPosition(offsetX, offsetY);
+    private void insertShape() {
+        int[][] figurePoints = shapes.getPosition(offsetX, offsetY);
         for (int i = 0; i < 4; i++) {
             int x = figurePoints[i][1];
             int y = figurePoints[i][0];
-            field.set(y, x, figure.getFigureNumber());
+            field.set(y, x, shapes.getShapeNumber());
         }
     }
 

@@ -1,6 +1,6 @@
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Figure {
+class Shapes {
     private int[][][] current;
     private int figureNumber = 0;
     private int[][][][] figures =
@@ -79,13 +79,13 @@ public class Figure {
             };
     private int state = 0;
     private int next = ThreadLocalRandom.current().nextInt(0,7);
-    private int nextFigureNumber;
+    private int nextShapeNumber;
 
-    public void rotate() {
+    void rotate() {
         state = (state + 1) % current.length;
     }
 
-    public int[][] getRotateCoordinates(int offsetX, int offsetY) {
+    int[][] getRotateCoordinates(int offsetX, int offsetY) {
         int[][] result = new int[current[0].length][2];
         for (int i = 0; i < result.length; i++) {
             result[i][0] = current[(state + 1) % current.length][i][0] + offsetY;
@@ -94,7 +94,7 @@ public class Figure {
         return result;
     }
 
-    public int[][] getPosition(int offsetX, int offsetY) {
+    int[][] getPosition(int offsetX, int offsetY) {
         int[][] result = new int[current[0].length][2];
         for (int i = 0; i < result.length; i++) {
             result[i][0] = current[state][i][0] + offsetY;
@@ -103,22 +103,22 @@ public class Figure {
         return result;
     }
 
-    public int getFigureNumber() {
+    int getShapeNumber() {
         return figureNumber;
     }
 
-    public void setRandom() {
+    void setRandom() {
         state = 0;
         int temp = next;
         next = ThreadLocalRandom.current().nextInt(0, 7);
-        nextFigureNumber = next + 1;
+        nextShapeNumber = next + 1;
         figureNumber = temp + 1;
         current = figures[temp];
     }
-    int getNextFigureNumber() {
-        return nextFigureNumber;
+    int getNextShapeNumber() {
+        return nextShapeNumber;
     }
-    int[][] getNextFigure() {
+    int[][] getNextShape() {
         return figures[next][0];
     }
 }

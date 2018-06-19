@@ -3,11 +3,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-public class Controller {
-    public static GraphicsContext gc;
-    public static Field field;
-    public static GraphicsContext gcNext;
-    public static Text score;
+class Controller {
+    static GraphicsContext gc;
+    static Field field;
+    static GraphicsContext gcNext;
+    static Text score;
     private static void drawRect(int i, int j, int figure, GraphicsContext gc) {
         if (figure > 0) {
                     switch (figure) {
@@ -37,7 +37,7 @@ public class Controller {
                 }
     }
 
-    public static void refresh() {
+    static void refresh() {
         gc.clearRect(0, 0, 300, 600);
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 10; j++) {
@@ -47,7 +47,7 @@ public class Controller {
         gcNext.clearRect(0,0,120,60);
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 4; j++) {
-                drawRect(i, j, field.getNextFigureCellValue(i,j),gcNext);
+                drawRect(i, j, field.getNextShapeCellValue(i,j),gcNext);
             }
         }
         score.setText(field.getScore().toString());

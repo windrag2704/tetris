@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         Group root = new Group();
         primaryStage.setTitle("Tetris");
         Scene scene = new Scene(root, 800, 629);
@@ -74,9 +74,7 @@ public class Main extends Application {
 
         MenuItem restartGame = new MenuItem("Restart");
         menuGame.getItems().add(restartGame);
-        restartGame.setOnAction(event -> {
-            tetris.restart();
-        });
+        restartGame.setOnAction(event -> tetris.restart() );
 
         MenuItem exitGame = new MenuItem("Exit");
         menuGame.getItems().add(exitGame);

@@ -1,26 +1,25 @@
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Tetris {
+class Tetris {
     private Field field = new Field();
     private boolean pause = true;
     private int period = 1000;
     private int delay = 1000;
     private boolean gameOver = false;
-    private int score = 0;
-    Timer timer;
+    private Timer timer;
 
-    public Tetris() {
+    Tetris() {
         Controller.field = field;
     }
 
-    public void launch() {
+    void launch() {
         field.start();
         start();
         pause = false;
     }
 
-    public void figureFall() {
+    void figureFall() {
         if (pause || period == 50) return;
         period = 50;
         delay = 0;
@@ -28,19 +27,19 @@ public class Tetris {
         start();
     }
 
-    public void moveLeft() {
+    void moveLeft() {
         field.moveLeft();
     }
 
-    public void moveRight() {
+    void moveRight() {
         field.moveRight();
     }
 
-    public void rotate() {
+    void rotate() {
         field.rotate();
     }
 
-    public void restart() {
+    void restart() {
         field.restart();
         period = 1000;
         delay = 1000;
@@ -48,7 +47,7 @@ public class Tetris {
         start();
     }
 
-    public void figureRestore() {
+    void figureRestore() {
         if (pause || period == 1000) return;
         period = 1000;
         delay = 1000;
@@ -56,7 +55,7 @@ public class Tetris {
         start();
     }
 
-    public void pause() {
+    void pause() {
         if (gameOver) return;
         pause = !pause;
         field.pause();
@@ -67,14 +66,14 @@ public class Tetris {
         }
     }
 
-    public void stop() {
+    private void stop() {
         if (timer != null) {
             timer.cancel();
             timer = null;
         }
     }
 
-    public void start() {
+    private void start() {
         if (timer != null) {
             timer = null;
         }
