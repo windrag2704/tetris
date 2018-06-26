@@ -1,49 +1,43 @@
 class Field {
-    private Matrix field = new Matrix(10, 20);
+    private Matrix gameArea = new Matrix(10, 20);
+    private Matrix nextShapeArea = new Matrix(4, 2);
     private Shapes shapes = new Shapes();
     private int offsetX = 4;
     private int offsetY = 0;
-    private boolean gameOver = false;
-    private boolean pause = false;
-    private Matrix nextShapeField = new Matrix(4, 2);
     private int score;
 
-    void start() {
+    boolean spawnShape() {
         shapes.setRandom();
         offsetX = 4;
         offsetY = 0;
         if (!checkNext(shapes.getPosition(offsetX, offsetY))) {
-            gameOver = true;
-            return;
+            return false;
         }
         insertShape();
-        nextShapeField.clear();
+        nextShapeArea.clear();
         insertNextShape();
-
-        Controller.refresh();
+        return true;
     }
 
-    void restart() {
-        gameOver = false;
-        field.clear();
-        start();
+    void clear() {
+        gameArea.clear();
     }
 
     int getNextShapeCellValue(int y, int x) {
-        return nextShapeField.get(y, x);
+        return nextShapeArea.get(y, x);
     }
 
     int getCellValue(int y, int x) {
-        return field.get(y, x);
+        return gameArea.get(y, x);
     }
 
     private void insertNextShape() {
-        nextShapeField.clear();
+        nextShapeArea.clear();
         int[][] nextShape = shapes.getNextShape();
         for (int i = 0; i < 4; i++) {
             int y = nextShape[i][0];
             int x = nextShape[i][1];
-            nextShapeField.set(y, x, shapes.getNextShapeNumber());
+            nextShapeArea.set(y, x, shapes.getNextShapeNumber());
         }
     }
 
@@ -51,48 +45,39 @@ class Field {
         return score;
     }
 
-    void moveDown() {
-        if (gameOver || pause) return;
+    boolean moveDown() {
+        boolean result = false;
         removeShape();
         if (checkNext(shapes.getPosition(offsetX, offsetY + 1))) {
             offsetY++;
-            insertShape();
-        } else {
-            insertShape();
-            removeFullLines();
-            start();
+            result = true;
         }
-        Controller.refresh();
+        insertShape();
+        return result;
     }
 
     void moveLeft() {
-        if (gameOver || pause) return;
         removeShape();
         if (checkNext(shapes.getPosition(offsetX - 1, offsetY))) {
             offsetX--;
         }
         insertShape();
-        Controller.refresh();
     }
 
     void moveRight() {
-        if (gameOver || pause) return;
         removeShape();
         if (checkNext(shapes.getPosition(offsetX + 1, offsetY))) {
             offsetX++;
         }
         insertShape();
-        Controller.refresh();
     }
 
-    void rotate() {
-        if (gameOver || pause) return;
+    void rotateShape() {
         removeShape();
         if (checkNext(shapes.getRotateCoordinates(offsetX, offsetY))) {
             shapes.rotate();
         }
         insertShape();
-        Controller.refresh();
     }
 
     private boolean checkNext(int[][] nextPosition) {
@@ -100,7 +85,7 @@ class Field {
             if (nextPosition[i][1] > 9 || nextPosition[i][1] < 0 || nextPosition[i][0] > 19 || nextPosition[i][0] < 0) {
                 return false;
             }
-            if (field.get(nextPosition[i][0], nextPosition[i][1]) > 0) {
+            if (gameArea.get(nextPosition[i][0], nextPosition[i][1]) > 0) {
                 return false;
             }
 
@@ -112,7 +97,7 @@ class Field {
         boolean full = true;
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 10; j++) {
-                if (field.get(i, j) == 0) {
+                if (gameArea.get(i, j) == 0) {
                     full = false;
                     break;
                 }
@@ -125,18 +110,19 @@ class Field {
         return 20;
     }
 
-    private void removeFullLines() {
+    int removeFullLines() {
+        int result = 0;
         int temp;
         do {
             temp = checkFullLine();
             if (temp == 20) break;
-            field.removeLine(temp);
-            score++;
+            gameArea.removeLine(temp);
+            result++;
             for (int i = temp - 1; i >= 0; i--) {
-                field.moveLine(i, i + 1);
+                gameArea.moveLine(i, i + 1);
             }
         } while (true);
-        Controller.refresh();
+        return result;
     }
 
     private void removeShape() {
@@ -144,7 +130,7 @@ class Field {
         for (int i = 0; i < 4; i++) {
             int x = figurePoints[i][1];
             int y = figurePoints[i][0];
-            field.set(y, x, 0);
+            gameArea.set(y, x, 0);
         }
     }
 
@@ -153,15 +139,7 @@ class Field {
         for (int i = 0; i < 4; i++) {
             int x = figurePoints[i][1];
             int y = figurePoints[i][0];
-            field.set(y, x, shapes.getShapeNumber());
+            gameArea.set(y, x, shapes.getShapeNumber());
         }
-    }
-
-    boolean isGameOver() {
-        return gameOver;
-    }
-
-    void pause() {
-        pause = !pause;
     }
 }

@@ -5,7 +5,7 @@ import javafx.scene.text.Text;
 
 class Controller {
     static GraphicsContext gc;
-    static Field field;
+    static Tetris game;
     static GraphicsContext gcNext;
     static Text score;
     private static void drawRect(int i, int j, int figure, GraphicsContext gc) {
@@ -41,18 +41,18 @@ class Controller {
         gc.clearRect(0, 0, 300, 600);
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 10; j++) {
-                drawRect(i,j,field.getCellValue(i,j),gc);
+                drawRect(i,j,game.getCellValue(i,j),gc);
             }
         }
         gcNext.clearRect(0,0,120,60);
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 4; j++) {
-                drawRect(i, j, field.getNextShapeCellValue(i,j),gcNext);
+                drawRect(i, j, game.getNextShapeCellValue(i,j),gcNext);
             }
         }
-        score.setText(field.getScore().toString());
+        score.setText(game.getScore().toString());
 
-        if (field.isGameOver()) {
+        if (game.isGameOver()) {
             Font font = new Font("Game Over", 35);
             gc.setFont(font);
             gc.setFill(Color.RED);

@@ -26,6 +26,7 @@ public class Main extends Application {
         scene.setFill(Color.rgb(0x33,0x33,0x33));
         primaryStage.setScene(scene);
         Tetris tetris = new Tetris();
+        Controller.game = tetris;
 
         BorderPane borderPane = new BorderPane();
         StackPane stackPane = new StackPane();
