@@ -10,17 +10,18 @@ class Field {
         shapes.setRandom();
         offsetX = 4;
         offsetY = 0;
+        nextShapeArea.clear();
+        insertNextShape();
         if (!checkNext(shapes.getPosition(offsetX, offsetY))) {
             return false;
         }
         insertShape();
-        nextShapeArea.clear();
-        insertNextShape();
         return true;
     }
 
     void clear() {
         gameArea.clear();
+        nextShapeArea.clear();
     }
 
     int getNextShapeCellValue(int y, int x) {
@@ -141,5 +142,8 @@ class Field {
             int y = figurePoints[i][0];
             gameArea.set(y, x, shapes.getShapeNumber());
         }
+    }
+    int getNextShapeNumber() {
+        return shapes.getNextShapeNumber();
     }
 }

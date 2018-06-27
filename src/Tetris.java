@@ -3,26 +3,32 @@ import java.util.TimerTask;
 
 class Tetris {
     private Field field = new Field();
-    private boolean pause = true;
+    private boolean pause = false;
+    private boolean stopped = true;
+    private int level = 1000;
     private int period = 1000;
     private int delay = 1000;
     private int score = 0;
     private boolean gameOver = false;
     private Timer timer;
 
-    void launch() {
+    void start() {
         field.spawnShape();
+        stopped = false;
         Controller.refresh();
-        start();
-        pause = false;
+        startTimer();
+    }
+
+    boolean isStopped() {
+        return stopped;
     }
 
     void figureFall() {
-        if (pause || gameOver || period == 50) return;
+        if (stopped || pause || gameOver || period <= 50) return;
         period = 50;
         delay = 0;
-        stop();
-        start();
+        stopTimer();
+        startTimer();
     }
 
     boolean isGameOver() {
@@ -34,10 +40,21 @@ class Tetris {
     }
 
     void moveDown() {
-        if (pause || gameOver) return;
+        if (pause || gameOver || stopped) return;
+        System.out.println(level);
         if (!field.moveDown()) {
-            score += field.removeFullLines();
+            int removedLines = field.removeFullLines();
+            score += removedLines;
             gameOver = !field.spawnShape();
+            if (removedLines > score % 5) {
+                for (int i = 0; i < removedLines / 5 + ((score - removedLines) % 5 + removedLines % 5) / 5; i++) {
+                    level = (int) (level * 0.9);
+                }
+                period = level;
+                delay = level;
+                stopTimer();
+                startTimer();
+            }
         }
         Controller.refresh();
     }
@@ -50,58 +67,81 @@ class Tetris {
         return field.getNextShapeCellValue(y, x);
     }
 
+    int getNextShapeNumber() {
+        return field.getNextShapeNumber();
+    }
+
+    boolean isPause() {
+        return pause;
+    }
+
     void moveLeft() {
-        if (pause || gameOver) return;
+        if (pause || gameOver || stopped) return;
         field.moveLeft();
         Controller.refresh();
     }
 
     void moveRight() {
-        if (pause || gameOver) return;
+        if (pause || gameOver || stopped) return;
         field.moveRight();
         Controller.refresh();
     }
 
     void rotate() {
-        if (pause || gameOver) return;
+        if (pause || gameOver || stopped) return;
         field.rotateShape();
+        Controller.refresh();
+    }
+
+    void stop() {
+        field.clear();
+        period = 1000;
+        level = 1000;
+        delay = 1000;
+        stopTimer();
+        score = 0;
+        stopped = true;
+        gameOver = false;
+        pause = false;
         Controller.refresh();
     }
 
     void restart() {
         field.clear();
         period = 1000;
+        level = 1000;
         delay = 1000;
-        stop();
-        start();
+        stopTimer();
+        startTimer();
     }
 
     void figureRestore() {
-        if (pause || period == 1000) return;
-        period = 1000;
-        delay = 1000;
-        stop();
-        start();
+        if (gameOver || stopped || pause || period == level) return;
+        period = level;
+        delay = level;
+        stopTimer();
+        startTimer();
     }
 
     void pause() {
-        if (gameOver) return;
+        if (gameOver || stopped) return;
         pause = !pause;
         if (pause) {
-            stop();
+            stopTimer();
         } else {
-            start();
+            startTimer();
         }
+        Controller.refresh();
     }
 
-    private void stop() {
+    private void stopTimer() {
         if (timer != null) {
             timer.cancel();
             timer = null;
         }
     }
 
-    private void start() {
+    private void startTimer() {
         if (timer != null) {
             timer = null;
         }
@@ -113,6 +153,7 @@ class Tetris {
                 if (gameOver) {
                     timer.cancel();
                     timer = null;
+                    Controller.refresh();
                 }
             }
         }, delay, period);
