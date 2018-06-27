@@ -4,7 +4,6 @@ class Field {
     private Shapes shapes = new Shapes();
     private int offsetX = 4;
     private int offsetY = 0;
-    private int score;
 
     boolean spawnShape() {
         shapes.setRandom();
@@ -40,10 +39,6 @@ class Field {
             int x = nextShape[i][1];
             nextShapeArea.set(y, x, shapes.getNextShapeNumber());
         }
-    }
-
-    Integer getScore() {
-        return score;
     }
 
     boolean moveDown() {
