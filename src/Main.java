@@ -25,8 +25,8 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         Tetris tetris = new Tetris();
 
-        Image leftImg = new Image("left.png");
-        Image rightImg = new Image("right.png");
+        Image leftImg = new Image("/res/left.png");
+        Image rightImg = new Image("/res/right.png");
 
         BorderPane borderPane = new BorderPane();
         GridPane right = new GridPane();
