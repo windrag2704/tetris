@@ -9,11 +9,21 @@ class Tetris {
     private int period = 1000;
     private int delay = 1000;
     private int score = 0;
+    private int difficulty = 0;
+    private double acceleration = 0.98;
     private boolean gameOver = false;
     private Timer timer;
 
+    void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
+    }
+
     void start() {
         field.spawnShape();
+        acceleration = 1 - (difficulty + 1) * 0.02;
+        level = 1000 - difficulty * 100;
+        period = level;
+        delay = level;
         stopped = false;
         Controller.refresh();
         startTimer();
@@ -39,16 +49,15 @@ class Tetris {
         return score;
     }
 
-    void moveDown() {
+    private synchronized void moveDown() {
         if (pause || gameOver || stopped) return;
-        System.out.println(level);
         if (!field.moveDown()) {
             int removedLines = field.removeFullLines();
             score += removedLines;
             gameOver = !field.spawnShape();
             if (removedLines > score % 5) {
                 for (int i = 0; i < removedLines / 5 + ((score - removedLines) % 5 + removedLines % 5) / 5; i++) {
-                    level = (int) (level * 0.9);
+                    level = (int) (level * acceleration);
                 }
                 period = level;
                 delay = level;
@@ -75,19 +84,19 @@ class Tetris {
         return pause;
     }
 
-    void moveLeft() {
+    synchronized void moveLeft() {
         if (pause || gameOver || stopped) return;
         field.moveLeft();
         Controller.refresh();
     }
 
-    void moveRight() {
+    synchronized void moveRight() {
         if (pause || gameOver || stopped) return;
         field.moveRight();
         Controller.refresh();
     }
 
-    void rotate() {
+    synchronized void rotate() {
         if (pause || gameOver || stopped) return;
         field.rotateShape();
         Controller.refresh();
@@ -95,9 +104,6 @@ class Tetris {
 
     void stop() {
         field.clear();
-        period = 1000;
-        level = 1000;
-        delay = 1000;
         stopTimer();
         score = 0;
         stopped = true;
@@ -107,12 +113,8 @@ class Tetris {
     }
 
     void restart() {
-        field.clear();
-        period = 1000;
-        level = 1000;
-        delay = 1000;
-        stopTimer();
-        startTimer();
+        stop();
+        start();
     }
 
     void figureRestore() {

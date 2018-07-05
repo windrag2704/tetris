@@ -12,11 +12,11 @@ class Matrix {
         }
     }
 
-    int get(int y, int x) {
+    synchronized int get(int y, int x) {
         return matrix[y * width + x];
     }
 
-    void set(int y, int x, int value) {
+    synchronized void set(int y, int x, int value) {
         matrix[y * width + x] = value;
     }
 

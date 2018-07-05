@@ -110,7 +110,7 @@ class Shapes {
     void setRandom() {
         state = 0;
         int temp = next;
-        next = ThreadLocalRandom.current().nextInt(0, 7);
+        next = ThreadLocalRandom.current().nextInt(0, 700000000) / 100000000;
         nextShapeNumber = next + 1;
         figureNumber = temp + 1;
         current = figures[temp];

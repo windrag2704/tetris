@@ -9,14 +9,14 @@ class Controller {
     static Text score;
     static Text info;
 
-    private static void drawRect(int i, int j, int figure, GraphicsContext gc, int offX, int offY) {
+    private static synchronized void drawRect(int i, int j, int figure, GraphicsContext gc, int offX, int offY) {
         if (figure > 0) {
             switch (figure) {
                 case 1:
                     gc.setFill(Color.CYAN);
                     break;
                 case 2:
-                    gc.setFill(Color.ORANGE);
+                    gc.setFill(Color.rgb(255,50,0));
                     break;
                 case 3:
                     gc.setFill(Color.BLUE);
