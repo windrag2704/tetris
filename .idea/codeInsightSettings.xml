@@ -3,6 +3,7 @@
   <component name="JavaProjectCodeInsightSettings">
     <excluded-names>
       <name />
+      <name>java.lang.ModuleLayer.Controller</name>
     </excluded-names>
   </component>
 </project>
